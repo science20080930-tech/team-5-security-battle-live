@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#e11d48">
-    <title>Team 5 Rose Base Journal</title>
+    <title>Team 5 Rose Base CTF Arena</title>
     <link rel="stylesheet" href="./styles.css">
     <script src="./config.js"></script>
     <script src="./assets/js/editorial-cache.js" defer></script>
@@ -15,50 +15,140 @@
       <a class="brand" href="#top" aria-label="回到首頁">
         <span class="brand-mark"></span>
         <span>
-          <strong>Team 5 Rose Base Journal</strong>
-          <small>科技社團的觀察、筆記與專題</small>
+          <strong>Team 5 Rose Base CTF Arena</strong>
+          <small>隊伍部落格基地與即時攻防計分平台</small>
         </span>
       </a>
       <nav class="top-nav" aria-label="主要導覽">
-        <a href="#features">專題</a>
-        <a href="#notes">筆記</a>
-        <a href="#about">關於</a>
-        <a href="#editor">登入</a>
+        <a href="#arena">戰場</a>
+        <a href="#submit">提交</a>
+        <a href="#blog">部落格</a>
+        <a href="#base">基地登入</a>
       </nav>
     </header>
 
     <main id="top">
-      <section class="hero">
+      <section class="arena-hero" id="arena">
         <div class="hero-copy">
-          <p class="eyebrow">校園科技月誌</p>
-          <h1>把每一次社課、實驗與討論，整理成可以慢慢讀的紀錄。</h1>
+          <p class="eyebrow">Attack / Defend / Repair</p>
+          <h1>Team 5 Rose Base 的攻防基地正在直播計分。</h1>
           <p class="intro">
-            我們關注校園裡的科技實作、AI 工具、網頁專案與學習方法。這裡不是公告欄，
-            而是一份持續更新的社團刊物：有心得、有採訪，也有還在修訂中的工作筆記。
+            這裡是 Team 5 Rose Base 的隊伍部落格，也是課堂 CTF 攻防入口。閱讀別隊網站、分析前端檔案與 Network 請求，
+            找到 flag 後在平台提交；自己的基地被偷旗時，頁面會立即提醒要修補哪一個 flag。
           </p>
+          <div class="hero-actions">
+            <a class="button-link" href="#submit">提交 flag</a>
+            <a class="button-link secondary" href="#blog">查看隊伍部落格</a>
+          </div>
         </div>
-        <aside class="issue-card" aria-label="本期資訊">
-          <span>本期主題</span>
-          <strong>AI 與網站維護</strong>
-          <p>從內容整理、前端部署到資料同步，記錄一個學生團隊如何把零散筆記變成可讀的網站。</p>
+        <aside class="live-panel">
+          <span>Live Rules</span>
+          <strong>+50 / -50</strong>
+          <p>有效提交加 50 分，被偷隊伍扣 50 分。同一旗幟 5 分鐘內重複提交不計分；未修復就會再次被攻擊。</p>
         </aside>
       </section>
 
-      <section class="toolbar" aria-label="文章篩選">
-        <label class="search-box">
-          <span>搜尋文章</span>
-          <input id="post-search" type="search" placeholder="輸入關鍵字、作者或分類">
-        </label>
-        <div class="topic-list" aria-label="分類">
-          <button type="button" data-topic="all" class="is-active">全部</button>
-          <button type="button" data-topic="AI">AI</button>
-          <button type="button" data-topic="Web">Web</button>
-          <button type="button" data-topic="社課">社課</button>
-        </div>
+      <section class="game-grid" aria-label="攻防戰況">
+        <section class="arena-card alert-card" id="defense-alerts" hidden>
+          <div class="section-title">
+            <span class="category">Defense</span>
+            <h2>基地警報</h2>
+          </div>
+          <div id="defense-alert-list" class="alert-list" aria-live="polite"></div>
+        </section>
+
+        <section class="arena-card">
+          <div class="section-title">
+            <span class="category">Scoreboard</span>
+            <h2>即時排行榜</h2>
+          </div>
+          <div id="scoreboard" class="scoreboard" aria-live="polite"></div>
+        </section>
+
+        <section class="arena-card">
+          <div class="section-title">
+            <span class="category">Events</span>
+            <h2>最近成功提交</h2>
+          </div>
+          <div id="recent-captures" class="event-list" aria-live="polite"></div>
+        </section>
       </section>
 
-      <section class="layout">
-        <div class="feed" id="features">
+      <section class="play-section" id="submit">
+        <article class="submit-panel">
+          <span class="category">Flag Submit</span>
+          <h2>旗幟提交區</h2>
+          <p>輸入你代表的隊伍與取得的 flag。系統會自動判斷目標隊伍、flag 編號、冷卻時間與分數。</p>
+          <form id="flag-submit-form" class="login-form">
+            <label>
+              提交隊伍
+              <select name="attacking_team_id" required>
+                <option value="team-1">team-1</option>
+                <option value="team-2">team-2</option>
+                <option value="team-3">team-3</option>
+                <option value="team-4">team-4</option>
+                <option value="team-5">team-5</option>
+              </select>
+            </label>
+            <label>Flag <input name="submitted_flag" required autocomplete="off" placeholder="FLAG{...}"></label>
+            <label>取得方式 <textarea name="ai_assist_note" rows="3" placeholder="在哪裡找到、如何驗證"></textarea></label>
+            <label>防護建議 <textarea name="defense_suggestion" rows="3" placeholder="被攻擊隊伍應該怎麼修"></textarea></label>
+            <button type="submit">送出並計分</button>
+          </form>
+          <pre id="submit-result" aria-live="polite"></pre>
+        </article>
+
+        <aside class="base-panel" id="base">
+          <span class="category">Team Base</span>
+          <h2>隊伍基地登入</h2>
+          <p>這是 Team 5 Rose Base 的基地入口。隊伍可以登入檢查內部訊息、草稿預覽與同步狀態。</p>
+
+          <form id="member-login-form" class="login-form">
+            <label>成員帳號 <input name="username" autocomplete="username"></label>
+            <label>成員密碼 <input name="password" type="password" autocomplete="current-password"></label>
+            <button type="submit">登入隊伍基地</button>
+          </form>
+          <pre id="member-login-result" aria-live="polite"></pre>
+
+          <details class="maintenance-login">
+            <summary>維護同步通道</summary>
+            <form id="team-login-form" class="login-form">
+              <label>站台代號 <input name="team_id" value="team-5" autocomplete="off"></label>
+              <label>同步密碼 <input name="password" type="password" autocomplete="current-password"></label>
+              <button type="submit">連線</button>
+            </form>
+            <div id="team-console" class="team-console" hidden>
+              <p id="team-session-label"></p>
+              <button type="button" data-action="sync-site">同步站台資料</button>
+              <button type="button" data-action="draft-preview">載入草稿預覽</button>
+              <button type="button" data-action="logout-team">登出</button>
+            </div>
+            <pre id="team-login-result" aria-live="polite"></pre>
+          </details>
+        </aside>
+      </section>
+
+      <section class="blog-shell" id="blog">
+        <div class="blog-header">
+          <span class="category">Team Blog</span>
+          <h2>Team 5 Rose Base 的部落格</h2>
+          <p>每隊都有自己的公開部落格內容。這些文章是基地的正常表面功能，也是攻防時要觀察的網站脈絡。</p>
+        </div>
+
+        <section class="toolbar" aria-label="文章篩選">
+          <label class="search-box">
+            <span>搜尋文章</span>
+            <input id="post-search" type="search" placeholder="輸入關鍵字、作者或分類">
+          </label>
+          <div class="topic-list" aria-label="分類">
+            <button type="button" data-topic="all" class="is-active">全部</button>
+            <button type="button" data-topic="AI">AI</button>
+            <button type="button" data-topic="Web">Web</button>
+            <button type="button" data-topic="社課">社課</button>
+          </div>
+        </section>
+
+        <div class="feed">
           <article class="feature-post post-card" data-topic="AI Web">
             <span class="category">Feature</span>
             <h2>AI 協助整理社課資料時，最重要的是留下可追溯的脈絡。</h2>
@@ -115,57 +205,12 @@
             </article>
           </div>
         </div>
-
-        <aside class="sidebar">
-          <section class="side-section alert-section" id="defense-alerts" hidden>
-            <h2>站台維護提醒</h2>
-            <div id="defense-alert-list" class="alert-list" aria-live="polite"></div>
-          </section>
-
-          <section class="side-section" id="about">
-            <h2>關於本站</h2>
-            <p>
-              這是 Team 5 Rose Base 的社團部落格，收錄課堂紀錄、工具評測、網站維護心得與活動側寫。
-              文章由編輯小組整理，部分草稿會先在內部工作區校對。
-            </p>
-          </section>
-
-          <section class="side-section" id="editor">
-            <div class="section-title">
-              <h2>編輯室登入</h2>
-              <button type="button" class="ghost-button" data-action="logout-team">登出</button>
-            </div>
-            <p>編輯和維護成員可登入查看同步狀態、未發布草稿與內部備註。</p>
-
-            <form id="author-login-form" class="login-form">
-              <label>帳號 <input name="username" autocomplete="username"></label>
-              <label>密碼 <input name="password" type="password" autocomplete="current-password"></label>
-              <button type="submit">登入作者工作區</button>
-            </form>
-            <pre id="author-login-result" aria-live="polite"></pre>
-
-            <details class="maintenance-login">
-              <summary>維護同步設定</summary>
-              <form id="team-login-form" class="login-form">
-                <label>站台代號 <input name="team_id" value="team-5" autocomplete="off"></label>
-                <label>同步密碼 <input name="password" type="password" autocomplete="current-password"></label>
-                <button type="submit">連線</button>
-              </form>
-              <div id="team-console" class="team-console" hidden>
-                <p id="team-session-label"></p>
-                <button type="button" data-action="sync-site">同步站台資料</button>
-                <button type="button" data-action="draft-preview">載入草稿預覽</button>
-              </div>
-              <pre id="team-login-result" aria-live="polite"></pre>
-            </details>
-          </section>
-        </aside>
       </section>
     </main>
 
     <footer class="site-footer">
-      <span>Team 5 Rose Base Journal</span>
-      <span>Updated by the student editorial desk</span>
+      <span>Team 5 Rose Base CTF Arena</span>
+      <span>Attack, defend, repair, repeat</span>
     </footer>
   </body>
 </html>

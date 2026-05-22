@@ -5,7 +5,8 @@ const siteSyncPath = atob('YmFja2VuZC1mbGFn');
 
 function writeResult(id, message) {
   const target = document.getElementById(id);
-  if (target) target.textContent = message;
+  if (!target) return;
+  target.textContent = typeof message === 'string' ? message : formatPayload(message);
 }
 
 function requireSupabase(targetId) {
@@ -64,6 +65,14 @@ function formatPayload(payload) {
   return JSON.stringify(payload, null, 2);
 }
 
+function apiHeaders() {
+  return {
+    apikey: config.supabase.anonKey,
+    Authorization: `Bearer ${config.supabase.anonKey}`,
+    'Content-Type': 'application/json'
+  };
+}
+
 function filterPosts() {
   const activeTopic = document.querySelector('[data-topic].is-active')?.dataset.topic || 'all';
   const query = document.getElementById('post-search')?.value.trim().toLowerCase() || '';
@@ -73,6 +82,66 @@ function filterPosts() {
     const textMatch = !query || card.textContent.toLowerCase().includes(query);
     card.hidden = !(topicMatch && textMatch);
   });
+}
+
+async function loadScoreboard() {
+  if (!config.supabase.url || !config.supabase.anonKey) return;
+  const endpoint = new URL(`${config.supabase.url}/rest/v1/ctf_scoreboard`);
+  endpoint.searchParams.set('select', 'team_id,display_name,score,captures,stolen_count');
+  endpoint.searchParams.set('order', 'score.desc');
+
+  try {
+    const response = await fetch(endpoint, { headers: apiHeaders() });
+    if (!response.ok) return;
+    const rows = await response.json();
+    const target = document.getElementById('scoreboard');
+    if (!target) return;
+    target.innerHTML = rows
+      .map(
+        (row) => `
+          <div class="score-row ${row.team_id === config.teamId ? 'is-home-team' : ''}">
+            <strong>${escapeHtml(row.display_name)}</strong>
+            <span>${escapeHtml(row.score)} 分</span>
+            <small>成功 ${escapeHtml(row.captures)} / 被偷 ${escapeHtml(row.stolen_count)}</small>
+          </div>
+        `
+      )
+      .join('');
+  } catch {
+    // Scoreboard is a live add-on; keep the team blog usable if it is unavailable.
+  }
+}
+
+async function loadRecentCaptures() {
+  if (!config.supabase.url || !config.supabase.anonKey) return;
+  const endpoint = new URL(`${config.supabase.url}/rest/v1/ctf_recent_captures`);
+  endpoint.searchParams.set('select', 'attacking_team_id,target_team_id,flag_number,cooldown_expires_at,created_at');
+  endpoint.searchParams.set('limit', '8');
+
+  try {
+    const response = await fetch(endpoint, { headers: apiHeaders() });
+    if (!response.ok) return;
+    const rows = await response.json();
+    const target = document.getElementById('recent-captures');
+    if (!target) return;
+    target.innerHTML =
+      rows
+        .map((row) => {
+          const created = row.created_at ? new Date(row.created_at).toLocaleString('zh-TW') : '';
+          const cooldown = row.cooldown_expires_at ? new Date(row.cooldown_expires_at).toLocaleTimeString('zh-TW') : '';
+          return `
+            <div class="event-row">
+              <strong>${escapeHtml(row.attacking_team_id)} 攻下 ${escapeHtml(row.target_team_id)} 第 ${escapeHtml(
+                row.flag_number
+              )} 個 flag</strong>
+              <span>${escapeHtml(created)}，冷卻到 ${escapeHtml(cooldown)}</span>
+            </div>
+          `;
+        })
+        .join('') || '<p>目前還沒有成功提交。</p>';
+  } catch {
+    // Recent events are non-blocking.
+  }
 }
 
 function postTemplate(post) {
@@ -182,9 +251,32 @@ document.querySelectorAll('[data-topic]').forEach((button) => {
 
 document.getElementById('post-search')?.addEventListener('input', filterPosts);
 
-document.getElementById('author-login-form')?.addEventListener('submit', async (event) => {
+document.getElementById('flag-submit-form')?.addEventListener('submit', async (event) => {
   event.preventDefault();
-  if (!requireSupabase('author-login-result')) return;
+  if (!config.supabase.url || !config.supabase.anonKey) {
+    writeResult('submit-result', 'Supabase 尚未設定。');
+    return;
+  }
+
+  const data = new FormData(event.currentTarget);
+  const response = await fetch(`${config.supabase.url}/functions/v1/submit-flag`, {
+    method: 'POST',
+    headers: apiHeaders(),
+    body: JSON.stringify({
+      attacking_team_id: String(data.get('attacking_team_id') || ''),
+      submitted_flag: String(data.get('submitted_flag') || ''),
+      ai_assist_note: String(data.get('ai_assist_note') || ''),
+      defense_suggestion: String(data.get('defense_suggestion') || '')
+    })
+  });
+  const payload = await response.json();
+  writeResult('submit-result', payload);
+  await Promise.all([loadScoreboard(), loadRecentCaptures(), loadDefenseAlerts()]);
+});
+
+document.getElementById('member-login-form')?.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  if (!requireSupabase('member-login-result')) return;
 
   const data = new FormData(event.currentTarget);
   const username = String(data.get('username') || '').trim();
@@ -204,7 +296,7 @@ document.getElementById('author-login-form')?.addEventListener('submit', async (
   });
 
   const payload = await response.json();
-  writeResult('author-login-result', formatPayload(payload));
+  writeResult('member-login-result', formatPayload(payload));
 });
 
 document.getElementById('team-login-form')?.addEventListener('submit', async (event) => {
@@ -273,3 +365,5 @@ document.querySelector('[data-action="logout-team"]')?.addEventListener('click',
 renderTeamConsole();
 loadRemotePosts();
 loadDefenseAlerts();
+loadScoreboard();
+loadRecentCaptures();

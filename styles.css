@@ -12,8 +12,8 @@
 body {
   margin: 0;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.86), rgba(247, 245, 239, 0.96)),
-    linear-gradient(90deg, rgba(20, 96, 120, 0.08), rgba(178, 89, 60, 0.08));
+    radial-gradient(circle at 20% 0%, rgba(218, 79, 47, 0.1), transparent 30%),
+    linear-gradient(180deg, #fbfaf7 0%, #f1f4f4 44%, #f7f5ef 100%);
 }
 
 a {
@@ -68,7 +68,7 @@ main,
 .top-nav,
 .post-meta,
 .eyebrow,
-.issue-card span {
+.live-panel span {
   color: #667075;
 }
 
@@ -83,14 +83,19 @@ main,
   text-decoration: none;
 }
 
+.arena-hero,
 .hero {
-  min-height: 470px;
+  min-height: 520px;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 330px;
+  grid-template-columns: minmax(0, 1fr) 360px;
   gap: 36px;
   align-items: end;
   padding: 72px 0 42px;
   border-bottom: 1px solid #d9d4ca;
+}
+
+.arena-hero {
+  position: relative;
 }
 
 .hero-copy {
@@ -123,6 +128,7 @@ h1 {
   line-height: 1.85;
 }
 
+.live-panel,
 .issue-card {
   padding: 24px;
   border: 1px solid #d6d0c4;
@@ -130,15 +136,103 @@ h1 {
   background: rgba(255, 255, 255, 0.82);
 }
 
+.live-panel strong,
 .issue-card strong {
   display: block;
   margin: 8px 0 10px;
   font-size: 1.45rem;
 }
 
+.live-panel p,
 .issue-card p {
   color: #465159;
   line-height: 1.72;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.button-link.secondary {
+  background: #ffffff;
+  border: 1px solid #cbd1d5;
+  color: #1e2428;
+}
+
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  padding: 24px 0;
+}
+
+.arena-card,
+.submit-panel,
+.base-panel,
+.blog-shell {
+  border: 1px solid #d6d0c4;
+  background: rgba(255, 255, 255, 0.88);
+}
+
+.arena-card,
+.submit-panel,
+.base-panel {
+  padding: 22px;
+}
+
+.arena-card {
+  min-height: 220px;
+}
+
+.arena-card .section-title {
+  display: block;
+}
+
+.arena-card h2,
+.submit-panel h2,
+.base-panel h2,
+.blog-header h2 {
+  margin-bottom: 10px;
+}
+
+.alert-card {
+  border-color: #d15b45;
+  border-top: 5px solid #d15b45;
+}
+
+.play-section {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 20px;
+  align-items: start;
+  padding: 16px 0 38px;
+}
+
+.submit-panel {
+  border-left: 6px solid var(--team-color);
+}
+
+.base-panel {
+  position: sticky;
+  top: 16px;
+}
+
+.blog-shell {
+  padding: 24px;
+  margin-bottom: 50px;
+}
+
+.blog-header {
+  max-width: 760px;
+  margin-bottom: 18px;
+}
+
+.blog-header p {
+  color: #47535a;
+  line-height: 1.74;
 }
 
 .toolbar {
@@ -345,7 +439,9 @@ label {
   font-weight: 800;
 }
 
-label input {
+label input,
+label select,
+label textarea {
   margin-top: 6px;
 }
 
@@ -402,6 +498,11 @@ pre {
   align-items: center;
 }
 
+.score-row.is-home-team {
+  border-color: var(--team-color);
+  box-shadow: inset 4px 0 0 var(--team-color);
+}
+
 .score-row small,
 .event-row span {
   color: #667075;
@@ -431,18 +532,23 @@ pre {
     flex-direction: column;
   }
 
+  .arena-hero,
   .hero,
   .toolbar,
   .layout,
-  .post-grid {
+  .post-grid,
+  .game-grid,
+  .play-section {
     grid-template-columns: 1fr;
   }
 
+  .arena-hero,
   .hero {
     min-height: auto;
   }
 
-  .sidebar {
+  .sidebar,
+  .base-panel {
     position: static;
   }
 }

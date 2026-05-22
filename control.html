@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="__TEAM_COLOR__">
+    <title>Journal Control</title>
+    <link rel="stylesheet" href="./styles.css">
+    <script src="./config.js"></script>
+    <script src="./control.js" defer></script>
+  </head>
+  <body style="--team-color: __TEAM_COLOR__">
+    <header class="site-header">
+      <a class="brand" href="./">
+        <span class="brand-mark"></span>
+        <span>
+          <strong>Journal Control</strong>
+          <small>提交紀錄與即時計分</small>
+        </span>
+      </a>
+      <nav class="top-nav" aria-label="主要導覽">
+        <a href="./">回到網站</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero control-hero">
+        <div class="hero-copy">
+          <p class="eyebrow">主控台</p>
+          <h1>提交取得的 flag，系統會自動套用分數與冷卻時間。</h1>
+          <p class="intro">
+            有效提交會讓提交隊伍加 50 分、被攻擊隊伍扣 50 分。同一隊伍同一個 flag 在五分鐘內重複提交不計分；
+            五分鐘後若尚未完成防護，可以再次被計分。
+          </p>
+        </div>
+      </section>
+
+      <section class="layout">
+        <div class="feed">
+          <article class="post-card">
+            <span class="category">Submit</span>
+            <h2>新增提交</h2>
+            <form id="flag-submit-form" class="login-form">
+              <label>
+                提交隊伍
+                <select name="attacking_team_id" required>
+                  <option value="team-1">team-1</option>
+                  <option value="team-2">team-2</option>
+                  <option value="team-3">team-3</option>
+                  <option value="team-4">team-4</option>
+                  <option value="team-5">team-5</option>
+                </select>
+              </label>
+              <label>Flag <input name="submitted_flag" required autocomplete="off" placeholder="FLAG{...}"></label>
+              <label>取得方式 <textarea name="ai_assist_note" rows="3" placeholder="簡短描述如何取得"></textarea></label>
+              <label>建議防護 <textarea name="defense_suggestion" rows="3" placeholder="簡短描述可如何修補"></textarea></label>
+              <button type="submit">送出並計分</button>
+            </form>
+            <pre id="submit-result" aria-live="polite"></pre>
+          </article>
+
+          <article class="post-card">
+            <span class="category">Events</span>
+            <h2>最近有效提交</h2>
+            <div id="recent-captures" class="event-list" aria-live="polite"></div>
+          </article>
+        </div>
+
+        <aside class="sidebar">
+          <section class="side-section">
+            <h2>即時分數</h2>
+            <div id="scoreboard" class="scoreboard" aria-live="polite"></div>
+          </section>
+        </aside>
+      </section>
+    </main>
+  </body>
+</html>

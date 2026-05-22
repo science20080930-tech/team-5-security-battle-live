@@ -129,6 +129,49 @@ async function loadRemotePosts() {
   }
 }
 
+function alertTemplate(alert) {
+  const stolenAt = alert.stolen_at ? new Date(alert.stolen_at).toLocaleString('zh-TW') : '';
+  const cooldownMinutes = Math.ceil(Number(alert.seconds_until_rescore || 0) / 60);
+  const cooldownCopy = cooldownMinutes > 0 ? `${cooldownMinutes} 分鐘內重複提交不計分` : '目前可再次被計分';
+  return `
+    <article class="defense-alert">
+      <strong>第 ${escapeHtml(alert.flag_number)} 個 flag 已被偷取，請去做防護。</strong>
+      <span>提交隊伍：${escapeHtml(alert.attacking_team_id)}</span>
+      <span>時間：${escapeHtml(stolenAt)}</span>
+      <span>${escapeHtml(cooldownCopy)}</span>
+    </article>
+  `;
+}
+
+async function loadDefenseAlerts() {
+  if (!config.supabase.url || !config.supabase.anonKey) return;
+
+  const endpoint = new URL(`${config.supabase.url}/rest/v1/ctf_team_compromise_status`);
+  endpoint.searchParams.set('target_team_id', `eq.${config.teamId}`);
+  endpoint.searchParams.set('select', 'flag_number,attacking_team_id,stolen_at,cooldown_expires_at,seconds_until_rescore');
+  endpoint.searchParams.set('order', 'flag_number.asc');
+
+  try {
+    const response = await fetch(endpoint, {
+      headers: {
+        apikey: config.supabase.anonKey,
+        Authorization: `Bearer ${config.supabase.anonKey}`
+      }
+    });
+    if (!response.ok) return;
+
+    const alerts = await response.json();
+    const section = document.getElementById('defense-alerts');
+    const list = document.getElementById('defense-alert-list');
+    if (!section || !list || !Array.isArray(alerts) || alerts.length === 0) return;
+
+    section.hidden = false;
+    list.innerHTML = alerts.map(alertTemplate).join('');
+  } catch {
+    // Public reading should not block the blog if the scoring view is unavailable.
+  }
+}
+
 document.querySelectorAll('[data-topic]').forEach((button) => {
   button.addEventListener('click', () => {
     document.querySelectorAll('[data-topic]').forEach((item) => item.classList.remove('is-active'));
@@ -229,3 +272,4 @@ document.querySelector('[data-action="logout-team"]')?.addEventListener('click',
 
 renderTeamConsole();
 loadRemotePosts();
+loadDefenseAlerts();

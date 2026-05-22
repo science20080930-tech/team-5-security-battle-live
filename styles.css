@@ -21,7 +21,9 @@ a {
 }
 
 button,
-input {
+input,
+select,
+textarea {
   font: inherit;
 }
 
@@ -155,13 +157,23 @@ h1 {
   color: #374247;
 }
 
-input {
+input,
+select,
+textarea {
   width: 100%;
-  min-height: 42px;
   border: 1px solid #c7cbd0;
   border-radius: 8px;
   padding: 9px 12px;
   background: rgba(255, 255, 255, 0.94);
+}
+
+input,
+select {
+  min-height: 42px;
+}
+
+textarea {
+  resize: vertical;
 }
 
 .topic-list {
@@ -288,6 +300,34 @@ button,
   padding: 20px;
 }
 
+.alert-section {
+  border-color: #d15b45;
+  border-top: 5px solid #d15b45;
+}
+
+.alert-list {
+  display: grid;
+  gap: 10px;
+}
+
+.defense-alert {
+  display: grid;
+  gap: 5px;
+  padding: 12px;
+  border-radius: 8px;
+  background: #fff2ed;
+  color: #5b271d;
+}
+
+.defense-alert strong {
+  line-height: 1.45;
+}
+
+.defense-alert span {
+  color: #784036;
+  font-size: 0.92rem;
+}
+
 .section-title {
   display: flex;
   align-items: center;
@@ -335,6 +375,40 @@ pre {
 
 .team-console {
   margin-top: 12px;
+}
+
+.control-hero {
+  min-height: 360px;
+}
+
+.scoreboard,
+.event-list {
+  display: grid;
+  gap: 10px;
+}
+
+.score-row,
+.event-row {
+  display: grid;
+  gap: 4px;
+  padding: 12px;
+  border: 1px solid #d9d4ca;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.score-row {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+.score-row small,
+.event-row span {
+  color: #667075;
+}
+
+.score-row small {
+  grid-column: 1 / -1;
 }
 
 .site-footer {

@@ -1,0 +1,20 @@
+{
+  "document": "internal content update log",
+  "teamId": "team-5",
+  "generatedAt": "2026-05-22T08:00:00+08:00",
+  "status": "staging-notes-accidentally-published",
+  "entries": [
+    {
+      "id": "post-refresh",
+      "title": "Refresh featured article order",
+      "owner": "editorial desk",
+      "note": "Keep the public blog calm; do not expose internal QA notes."
+    },
+    {
+      "id": "qa-flag-note",
+      "title": "QA marker for update pipeline",
+      "owner": "automation",
+      "flag_value": "FLAG{BLOG_T5_UPDATE_DOC_CD1855BEA3}"
+    }
+  ]
+}

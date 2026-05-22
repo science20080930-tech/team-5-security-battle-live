@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#e11d48">
+    <title>Team 5 Rose Base Editorial Blog</title>
+    <link rel="stylesheet" href="./styles.css">
+    <script src="./config.js"></script>
+    <script src="./assets/js/editorial-cache.js" defer></script>
+    <script src="./app.js" defer></script>
+  </head>
+  <body style="--team-color: #e11d48">
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="回到首頁">
+        <span class="brand-mark"></span>
+        <span>
+          <strong>Team 5 Rose Base Notes</strong>
+          <small>校園科技、社團紀錄、AI 實作週記</small>
+        </span>
+      </a>
+      <nav class="top-nav" aria-label="主要導覽">
+        <a href="#posts">文章</a>
+        <a href="#archive">更新</a>
+        <a href="#author">作者登入</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <p class="eyebrow">AI 資安攻防戰 / team-5</p>
+        <h1>我們把社課紀錄整理成一座小型技術部落格。</h1>
+        <p class="intro">
+          這裡記錄每週的 AI 工具測試、網頁維護筆記、社團專案更新和作者草稿。
+          對外訪客只能閱讀公開文章；作者和隊伍維護者可以透過右側面板進入內部功能。
+        </p>
+      </section>
+
+      <section class="layout">
+        <div class="feed" id="posts">
+          <article class="feature-post">
+            <span class="category">Featured</span>
+            <h2>AI 協助整理資安筆記時，最容易忽略的是「資料放在哪裡」。</h2>
+            <p>
+              社課常把功能做出來當作完成，但真正的網站還要檢查靜態檔、資料檔、登入流程和 API 回傳內容。
+              這篇文章整理本週維護心得：不要只看畫面，也要看瀏覽器載入了哪些檔案。
+            </p>
+            <div class="post-meta">
+              <span>作者：社團編輯小組</span>
+              <span>更新：2026/05/22</span>
+              <span>分類：Web Security</span>
+            </div>
+          </article>
+
+          <article class="post-row">
+            <span class="category">Frontend</span>
+            <h3>從 HTML 到 JavaScript：公開網站的每個檔案都算公開。</h3>
+            <p>
+              如果機密資訊被放進瀏覽器會下載的檔案，即使畫面沒有顯示，使用者仍然可能從開發者工具看到。
+              前端可以做體驗，不能當保險箱。
+            </p>
+          </article>
+
+          <article class="post-row">
+            <span class="category">Content Ops</span>
+            <h3>內容更新紀錄也需要審核，不只是文章本身。</h3>
+            <p>
+              自動產生的 JSON、Markdown、sitemap 或 robots 記錄常常被當成小事。
+              但只要部署到公開網站，它們就和正式頁面一樣會被讀到。
+            </p>
+          </article>
+
+          <article class="post-row">
+            <span class="category">Account</span>
+            <h3>作者登入應該保護內容，而不是只保護按鈕。</h3>
+            <p>
+              登入頁若使用弱密碼或沒有嘗試次數限制，攻擊者可能不需要繞過系統，只要猜中密碼就能看到內部訊息。
+            </p>
+          </article>
+
+          <article class="post-row">
+            <span class="category">Backend</span>
+            <h3>後端有驗證，不代表有授權。</h3>
+            <p>
+              很多漏洞不是「沒登入」，而是「登入了任何帳號就能讀到不屬於自己的資料」。
+              Supabase、Edge Function 和資料表政策都需要一起檢查。
+            </p>
+          </article>
+
+          <article class="post-row">
+            <span class="category">Drafts</span>
+            <h3>草稿預覽功能常是內容網站的盲點。</h3>
+            <p>
+              未發布文章可能還沒準備好公開，但預覽 API 如果只檢查是否登入，沒有檢查隊伍或作者身分，
+              就會把草稿內容交給錯的人。
+            </p>
+          </article>
+        </div>
+
+        <aside class="sidebar">
+          <section class="side-section" id="archive">
+            <h2>網站狀態</h2>
+            <p>公開文章已同步。內容更新資料由自動化流程產生，維護者需確認沒有把內部筆記一起發布。</p>
+            <button type="button" data-action="load-public-update">讀取公開更新摘要</button>
+            <pre id="update-result" aria-live="polite"></pre>
+          </section>
+
+          <section class="side-section" id="author">
+            <h2>作者登入</h2>
+            <p>作者登入後可以查看尚未整理完的編輯提示。這是一般部落格會存在的功能，不是公開文章。</p>
+            <form id="author-login-form" class="login-form">
+              <label>帳號 <input name="username" autocomplete="username"></label>
+              <label>密碼 <input name="password" type="password" autocomplete="current-password"></label>
+              <button type="submit">登入作者區</button>
+            </form>
+            <pre id="author-login-result" aria-live="polite"></pre>
+          </section>
+
+          <section class="side-section team-panel">
+            <h2>隊伍維護後台</h2>
+            <p>每隊只應該登入自己的後台。初始版本保留了需要學生修補的授權問題。</p>
+            <form id="team-login-form" class="login-form">
+              <label>隊伍 <input name="team_id" value="team-5" autocomplete="off"></label>
+              <label>隊伍密碼 <input name="password" type="password" autocomplete="current-password"></label>
+              <button type="submit">登入隊伍後台</button>
+            </form>
+            <div id="team-console" class="team-console" hidden>
+              <p id="team-session-label"></p>
+              <a id="repo-link" class="button-link" href="#" target="_blank" rel="noreferrer">開啟隊伍 repo</a>
+              <button type="button" data-action="backend-flag">讀取後端資料</button>
+              <button type="button" data-action="draft-preview">預覽未公開草稿</button>
+              <button type="button" data-action="logout-team">登出</button>
+            </div>
+            <pre id="team-login-result" aria-live="polite"></pre>
+          </section>
+        </aside>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>Team 5 Rose Base Editorial Blog</span>
+      <span>Classroom-only AI security lab</span>
+    </footer>
+  </body>
+</html>

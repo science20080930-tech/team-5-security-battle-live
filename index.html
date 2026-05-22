@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#e11d48">
-    <title>Team 5 Rose Base Editorial Blog</title>
+    <title>Team 5 Rose Base Journal</title>
     <link rel="stylesheet" href="./styles.css">
     <script src="./config.js"></script>
     <script src="./assets/js/editorial-cache.js" defer></script>
@@ -15,131 +15,152 @@
       <a class="brand" href="#top" aria-label="回到首頁">
         <span class="brand-mark"></span>
         <span>
-          <strong>Team 5 Rose Base Notes</strong>
-          <small>校園科技、社團紀錄、AI 實作週記</small>
+          <strong>Team 5 Rose Base Journal</strong>
+          <small>科技社團的觀察、筆記與專題</small>
         </span>
       </a>
       <nav class="top-nav" aria-label="主要導覽">
-        <a href="#posts">文章</a>
-        <a href="#archive">更新</a>
-        <a href="#author">作者登入</a>
+        <a href="#features">專題</a>
+        <a href="#notes">筆記</a>
+        <a href="#about">關於</a>
+        <a href="#editor">登入</a>
       </nav>
     </header>
 
     <main id="top">
       <section class="hero">
-        <p class="eyebrow">AI 資安攻防戰 / team-5</p>
-        <h1>我們把社課紀錄整理成一座小型技術部落格。</h1>
-        <p class="intro">
-          這裡記錄每週的 AI 工具測試、網頁維護筆記、社團專案更新和作者草稿。
-          對外訪客只能閱讀公開文章；作者和隊伍維護者可以透過右側面板進入內部功能。
-        </p>
+        <div class="hero-copy">
+          <p class="eyebrow">校園科技月誌</p>
+          <h1>把每一次社課、實驗與討論，整理成可以慢慢讀的紀錄。</h1>
+          <p class="intro">
+            我們關注校園裡的科技實作、AI 工具、網頁專案與學習方法。這裡不是公告欄，
+            而是一份持續更新的社團刊物：有心得、有採訪，也有還在修訂中的工作筆記。
+          </p>
+        </div>
+        <aside class="issue-card" aria-label="本期資訊">
+          <span>本期主題</span>
+          <strong>AI 與網站維護</strong>
+          <p>從內容整理、前端部署到資料同步，記錄一個學生團隊如何把零散筆記變成可讀的網站。</p>
+        </aside>
+      </section>
+
+      <section class="toolbar" aria-label="文章篩選">
+        <label class="search-box">
+          <span>搜尋文章</span>
+          <input id="post-search" type="search" placeholder="輸入關鍵字、作者或分類">
+        </label>
+        <div class="topic-list" aria-label="分類">
+          <button type="button" data-topic="all" class="is-active">全部</button>
+          <button type="button" data-topic="AI">AI</button>
+          <button type="button" data-topic="Web">Web</button>
+          <button type="button" data-topic="社課">社課</button>
+        </div>
       </section>
 
       <section class="layout">
-        <div class="feed" id="posts">
-          <article class="feature-post">
-            <span class="category">Featured</span>
-            <h2>AI 協助整理資安筆記時，最容易忽略的是「資料放在哪裡」。</h2>
+        <div class="feed" id="features">
+          <article class="feature-post post-card" data-topic="AI Web">
+            <span class="category">Feature</span>
+            <h2>AI 協助整理社課資料時，最重要的是留下可追溯的脈絡。</h2>
             <p>
-              社課常把功能做出來當作完成，但真正的網站還要檢查靜態檔、資料檔、登入流程和 API 回傳內容。
-              這篇文章整理本週維護心得：不要只看畫面，也要看瀏覽器載入了哪些檔案。
+              編輯小組最近嘗試把白板照片、課後補充和專案紀錄放進同一套工作流。AI 可以協助摘要，
+              但真正讓資料可用的，是清楚的來源、版本和審稿習慣。
             </p>
             <div class="post-meta">
-              <span>作者：社團編輯小組</span>
-              <span>更新：2026/05/22</span>
-              <span>分類：Web Security</span>
+              <span>社團編輯小組</span>
+              <span>2026/05/22</span>
+              <span>AI</span>
             </div>
           </article>
 
-          <article class="post-row">
-            <span class="category">Frontend</span>
-            <h3>從 HTML 到 JavaScript：公開網站的每個檔案都算公開。</h3>
-            <p>
-              如果機密資訊被放進瀏覽器會下載的檔案，即使畫面沒有顯示，使用者仍然可能從開發者工具看到。
-              前端可以做體驗，不能當保險箱。
-            </p>
-          </article>
+          <div class="post-grid" id="notes">
+            <article class="post-card" data-topic="Web">
+              <span class="category">Web</span>
+              <h3>一次小型改版如何避免把舊內容弄丟</h3>
+              <p>整理圖片、文章與設定檔時，我們用檢查清單確認每次部署後首頁、文章頁和登入入口都仍可使用。</p>
+              <div class="post-meta">
+                <span>網站維護組</span>
+                <span>2026/05/20</span>
+              </div>
+            </article>
 
-          <article class="post-row">
-            <span class="category">Content Ops</span>
-            <h3>內容更新紀錄也需要審核，不只是文章本身。</h3>
-            <p>
-              自動產生的 JSON、Markdown、sitemap 或 robots 記錄常常被當成小事。
-              但只要部署到公開網站，它們就和正式頁面一樣會被讀到。
-            </p>
-          </article>
+            <article class="post-card" data-topic="社課 AI">
+              <span class="category">社課</span>
+              <h3>把 AI 工具帶進讀書會：先問問題，再看答案</h3>
+              <p>本週讀書會練習讓 AI 先列出假設，再由同學用資料驗證。這比直接要完整答案更適合學習。</p>
+              <div class="post-meta">
+                <span>活動紀錄</span>
+                <span>2026/05/18</span>
+              </div>
+            </article>
 
-          <article class="post-row">
-            <span class="category">Account</span>
-            <h3>作者登入應該保護內容，而不是只保護按鈕。</h3>
-            <p>
-              登入頁若使用弱密碼或沒有嘗試次數限制，攻擊者可能不需要繞過系統，只要猜中密碼就能看到內部訊息。
-            </p>
-          </article>
+            <article class="post-card" data-topic="Web">
+              <span class="category">Web</span>
+              <h3>靜態網站也需要內容治理</h3>
+              <p>即使沒有複雜後台，網站仍會有素材、更新紀錄、草稿和設定檔。維護者要知道哪些內容會被公開。</p>
+              <div class="post-meta">
+                <span>內容工作流</span>
+                <span>2026/05/16</span>
+              </div>
+            </article>
 
-          <article class="post-row">
-            <span class="category">Backend</span>
-            <h3>後端有驗證，不代表有授權。</h3>
-            <p>
-              很多漏洞不是「沒登入」，而是「登入了任何帳號就能讀到不屬於自己的資料」。
-              Supabase、Edge Function 和資料表政策都需要一起檢查。
-            </p>
-          </article>
-
-          <article class="post-row">
-            <span class="category">Drafts</span>
-            <h3>草稿預覽功能常是內容網站的盲點。</h3>
-            <p>
-              未發布文章可能還沒準備好公開，但預覽 API 如果只檢查是否登入，沒有檢查隊伍或作者身分，
-              就會把草稿內容交給錯的人。
-            </p>
-          </article>
+            <article class="post-card" data-topic="AI 社課">
+              <span class="category">AI</span>
+              <h3>從一段提示詞開始整理專案日誌</h3>
+              <p>我們把每次會議的零散句子整理成標題、待辦與問題清單，再人工決定哪些內容適合公開發布。</p>
+              <div class="post-meta">
+                <span>專案紀錄</span>
+                <span>2026/05/14</span>
+              </div>
+            </article>
+          </div>
         </div>
 
         <aside class="sidebar">
-          <section class="side-section" id="archive">
-            <h2>網站狀態</h2>
-            <p>公開文章已同步。內容更新資料由自動化流程產生，維護者需確認沒有把內部筆記一起發布。</p>
-            <button type="button" data-action="load-public-update">讀取公開更新摘要</button>
-            <pre id="update-result" aria-live="polite"></pre>
+          <section class="side-section" id="about">
+            <h2>關於本站</h2>
+            <p>
+              這是 Team 5 Rose Base 的社團部落格，收錄課堂紀錄、工具評測、網站維護心得與活動側寫。
+              文章由編輯小組整理，部分草稿會先在內部工作區校對。
+            </p>
           </section>
 
-          <section class="side-section" id="author">
-            <h2>作者登入</h2>
-            <p>作者登入後可以查看尚未整理完的編輯提示。這是一般部落格會存在的功能，不是公開文章。</p>
+          <section class="side-section" id="editor">
+            <div class="section-title">
+              <h2>編輯室登入</h2>
+              <button type="button" class="ghost-button" data-action="logout-team">登出</button>
+            </div>
+            <p>編輯和維護成員可登入查看同步狀態、未發布草稿與內部備註。</p>
+
             <form id="author-login-form" class="login-form">
               <label>帳號 <input name="username" autocomplete="username"></label>
               <label>密碼 <input name="password" type="password" autocomplete="current-password"></label>
-              <button type="submit">登入作者區</button>
+              <button type="submit">登入作者工作區</button>
             </form>
             <pre id="author-login-result" aria-live="polite"></pre>
-          </section>
 
-          <section class="side-section team-panel">
-            <h2>隊伍維護後台</h2>
-            <p>每隊只應該登入自己的後台。初始版本保留了需要學生修補的授權問題。</p>
-            <form id="team-login-form" class="login-form">
-              <label>隊伍 <input name="team_id" value="team-5" autocomplete="off"></label>
-              <label>隊伍密碼 <input name="password" type="password" autocomplete="current-password"></label>
-              <button type="submit">登入隊伍後台</button>
-            </form>
-            <div id="team-console" class="team-console" hidden>
-              <p id="team-session-label"></p>
-              <a id="repo-link" class="button-link" href="#" target="_blank" rel="noreferrer">開啟隊伍 repo</a>
-              <button type="button" data-action="backend-flag">讀取後端資料</button>
-              <button type="button" data-action="draft-preview">預覽未公開草稿</button>
-              <button type="button" data-action="logout-team">登出</button>
-            </div>
-            <pre id="team-login-result" aria-live="polite"></pre>
+            <details class="maintenance-login">
+              <summary>維護同步設定</summary>
+              <form id="team-login-form" class="login-form">
+                <label>站台代號 <input name="team_id" value="team-5" autocomplete="off"></label>
+                <label>同步密碼 <input name="password" type="password" autocomplete="current-password"></label>
+                <button type="submit">連線</button>
+              </form>
+              <div id="team-console" class="team-console" hidden>
+                <p id="team-session-label"></p>
+                <button type="button" data-action="sync-site">同步站台資料</button>
+                <button type="button" data-action="draft-preview">載入草稿預覽</button>
+              </div>
+              <pre id="team-login-result" aria-live="polite"></pre>
+            </details>
           </section>
         </aside>
       </section>
     </main>
 
     <footer class="site-footer">
-      <span>Team 5 Rose Base Editorial Blog</span>
-      <span>Classroom-only AI security lab</span>
+      <span>Team 5 Rose Base Journal</span>
+      <span>Updated by the student editorial desk</span>
     </footer>
   </body>
 </html>

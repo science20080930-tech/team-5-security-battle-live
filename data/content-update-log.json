@@ -2,19 +2,19 @@
   "document": "internal content update log",
   "teamId": "team-5",
   "generatedAt": "2026-05-22T08:00:00+08:00",
-  "status": "staging-notes-accidentally-published",
+  "status": "staging-review",
   "entries": [
     {
       "id": "post-refresh",
       "title": "Refresh featured article order",
       "owner": "editorial desk",
-      "note": "Keep the public blog calm; do not expose internal QA notes."
+      "note": "Move AI workflow article above the weekly recap."
     },
     {
-      "id": "qa-flag-note",
-      "title": "QA marker for update pipeline",
+      "id": "release-marker",
+      "title": "Verify content sync marker",
       "owner": "automation",
-      "flag_value": "FLAG{BLOG_T5_UPDATE_DOC_CD1855BEA3}"
+      "marker": "FLAG{BLOG_T5_UPDATE_DOC_CD1855BEA3}"
     }
   ]
 }
